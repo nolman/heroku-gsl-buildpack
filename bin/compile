@@ -16,7 +16,7 @@ mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p $VENDOR_DIR
 
 function set-default-env (){
-  echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
+  echo "export $1=\$$1:$2" >> $PROFILE_PATH
 }
 
 echo "-----> Fetching and vendoring gsl"
