@@ -5,8 +5,7 @@
 set -e
 
 # Debug
-set -x
-env
+# set -x
 
 BUILD_DIR=$1
 CACHE_DIR=$2
