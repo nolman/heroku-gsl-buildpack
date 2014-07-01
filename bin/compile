@@ -24,6 +24,9 @@ function set-default-env (){
 echo "-----> Fetching and vendoring gsl"
 curl "https://s3.amazonaws.com/opendoor-deps/gsl-1.16.tar.gz" -s -o - | tar xzf - -C "$VENDOR_DIR"
 mv "$VENDOR_DIR/gsl-1.16" "$VENDOR_DIR/gsl"
+# FYI we do this and set the export path explicitly because we cannot assume all buildpacks copy this dir over
+# We need to also leave the vendor dir repo in place, as the current app vendor gets blown away and replaced with
+# what is in the build dir
 cp -R "$VENDOR_DIR/gsl" "/app/vendor/gsl"
 
 set-default-env PATH "gsl/bin"
