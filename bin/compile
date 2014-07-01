@@ -18,12 +18,13 @@ mkdir -p $VENDOR_DIR
 
 function set-default-env (){
   echo "export $1=\$$1:/app/vendor/$2" >> $PROFILE_PATH
-  echo "export $1=\$$1:$VENDOR_DIR/$2" >> $EXPORT_PATH
+  echo "export $1=\$$1:/app/vendor/$2" >> $EXPORT_PATH
 }
 
 echo "-----> Fetching and vendoring gsl"
 curl "https://s3.amazonaws.com/opendoor-deps/gsl-1.16.tar.gz" -s -o - | tar xzf - -C "$VENDOR_DIR"
 mv "$VENDOR_DIR/gsl-1.16" "$VENDOR_DIR/gsl"
+cp -R "$VENDOR_DIR/gsl" "/app/vendor/gsl"
 
 set-default-env PATH "gsl/bin"
 set-default-env LD_LIBRARY_PATH "gsl/lib"
