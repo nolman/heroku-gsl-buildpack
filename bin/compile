@@ -27,3 +27,5 @@ set-default-env PATH "/app/vendor/gsl/bin"
 set-default-env LD_LIBRARY_PATH "/app/vendor/gsl/lib"
 set-default-env LIBRARY_PATH "/app/vendor/gsl/lib"
 set-default-env CPATH "/app/vendor/gsl/include"
+
+source $PROFILE_PATH
