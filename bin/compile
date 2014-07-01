@@ -11,7 +11,7 @@ env
 BUILD_DIR=$1
 CACHE_DIR=$2
 VENDOR_DIR="$BUILD_DIR/vendor"
-EXPORT_PATH="$BUILD_DIR/export"
+EXPORT_PATH="$PWD/export"
 PROFILE_PATH="$BUILD_DIR/.profile.d/gsl.sh"
 
 mkdir -p $(dirname $PROFILE_PATH)
