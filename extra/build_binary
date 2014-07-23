@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+# This is to build a native dependency on a containerized app (ex heroku)
+# This downloads a native dependency (only supports tar.gz for now) and compiles it
+# And uploads the resulting built library to the specified S3Bucket/S3FileName
+# To build gsl on heroku:
+# heruko run ./bin/build_binary "http://reflection.oss.ou.edu/gnu/gnu/gsl/gsl-1.16.tar.gz" BUCKET_NAME/gsl-1.16.tar.gz
+
+APP_PATH = File.expand_path('../../config/application',  __FILE__)
+require_relative '../config/environment'
+
+if ARGV[0] == false
+  puts "Usage: ./bin/build_binary URL S3Bucket/S3Filename"
+  exit
+end
+
+url = ARGV[0]
+dir_name, file_name = ARGV[1].split("/")
+download_name = url.split("/").last
+download_root = download_name.split(".tar.gz").first
+
+Kernel.system "curl -O \"#{url}\" -s"
+Kernel.system "tar xzvf #{download_name}"
+Dir.chdir(File.join(Dir.pwd, download_root)) do
+  Kernel.system "./configure --prefix /app/vendor/#{download_root}"
+  Kernel.system "make"
+  Kernel.system "make install"
+end
+Dir.chdir("/app/vendor/") do
+  Kernel.system "tar -czf /tmp/#{file_name} #{download_root}/"
+end
+
+connection = Fog::Storage.new({
+  :provider               => 'AWS',
+  :aws_access_key_id      => ENV["AWS_KEY"],
+  :aws_secret_access_key  => ENV["AWS_SECRET"],
+})
+
+directory = connection.directories.get(dir_name) || connection.directories.create(key: dir_name)
+file = directory.files.create(
+  key: file_name,
+  body: File.read("/tmp/#{file_name}"),
+  public: true,
+)

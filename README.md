@@ -25,6 +25,15 @@ https://github.com/heroku/heroku-buildpack-ruby.git#v119
 
 You can replace the ruby buildpack with whatever you language of choice is.
 
+## Compiling binaries on heroku
+
+You can find an example script that compiles binary from a source tar.gz [here](extra/build_binary)
+
+This script relies on the fog gem to upload the binary to s3. You will need to add that dependency to your Gemfile. You will also need to set an ENV var for your AWS key and secret.
+
 ## Known issues
 
-Currently only support the 1.16 GSL release.
+Only supports the 1.16 GSL release.
+Cannot set the AWS Bucket to download dependencies via an env var.
+
+Pull requests welcome.
