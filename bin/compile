@@ -13,10 +13,9 @@ VENDOR_DIR="$BUILD_DIR/vendor"
 EXPORT_PATH="$PWD/export"
 PROFILE_PATH="$BUILD_DIR/.profile.d/gsl.sh"
 
-echo "VENDOR_DIR $VENDOR_DIR"
-
 mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p $VENDOR_DIR
+mkdir -p "${HOME}/vendor"
 
 function set-default-env (){
   echo "export $1=\$$1:${HOME}/vendor/$2" >> $PROFILE_PATH
@@ -29,7 +28,6 @@ mv "$VENDOR_DIR/gsl-1.16" "$VENDOR_DIR/gsl"
 # FYI we do this and set the export path explicitly because we cannot assume all buildpacks copy this dir over
 # We need to also leave the vendor dir repo in place, as the current app vendor gets blown away and replaced with
 # what is in the build dir
-[ -d "${HOME}/vendor" ] && echo "Directory ${HOME}/vendor exists."
 cp -R "$VENDOR_DIR/gsl" "${HOME}/vendor/gsl"
 
 set-default-env PATH "gsl/bin"
